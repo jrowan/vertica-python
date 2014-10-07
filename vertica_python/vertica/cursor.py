@@ -153,6 +153,38 @@ class Cursor(object):
         # Legacy support
         self.copy_string(sql, data)
 
+    # example:
+    #
+    # with open("/tmp/file.csv", "rb") as fs:
+    #   cursor.copy_stream("COPY table(field1,field2) FROM STDIN DELIMITER ',' ENCLOSED BY '\"'", fs, buffer_size=65536)
+    #
+    # this method from Johan Olofsson's fork of vertica-python, found at https://github.com/johano99/vertica-python
+
+    def copy_stream(self, sql, data, **kwargs):
+        if self.closed():
+            raise errors.Error('Cursor is closed')
+
+        self.connection.write(messages.Query(sql))
+
+        while True:
+            message = self.connection.read_message()
+            self._process_message(message=message)
+            if isinstance(message, messages.ReadyForQuery):
+                break
+            elif isinstance(message, messages.CopyInResponse):
+
+                #write stuff
+                if not hasattr(data, "read"):
+                    self.connection.write(messages.CopyData(data))
+                else:
+                    # treat data as stream
+                    self.connection.write(messages.CopyStream(data, **kwargs))
+
+                self.connection.write(messages.CopyDone())
+
+        if self.error is not None:
+            raise self.error
+
     def _copy_internal(self, sql, datagen):
         if self.closed():
             raise errors.Error('Cursor is closed')
