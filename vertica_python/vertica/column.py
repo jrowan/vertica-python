@@ -107,6 +107,25 @@ class Column(object):
             self.converter = self.DATA_TYPE_CONVERSIONS[col['data_type_oid']][1]
         except IndexError:
             self.converter = self.DATA_TYPE_CONVERSIONS[0][1]
+
+        # WORKAROUND: Treat LONGVARCHAR as VARCHAR
+        if self.type_code == 115:
+            self.type_code = 9
+
+        #self.props = ColumnTuple(col['name'], col['data_type_oid'], None, col['data_type_size'], None, None, None)
+        # self.props = ColumnTuple(col['name'], self.type_code, None, col['data_type_size'], None, None, None)
+
+        # self.converter = self.DATA_TYPE_CONVERSIONS[col['data_type_oid']][1]
+        # self.converter = self.DATA_TYPE_CONVERSIONS[self.type_code][1]
+
+        self.props = ColumnTuple(col['name'], col['data_type_oid'], None,
+                                 col['data_type_size'], None, None, None)
+
+        try:
+            self.converter = self.DATA_TYPE_CONVERSIONS[col['data_type_oid']][1]
+        except IndexError:
+            self.converter = self.DATA_TYPE_CONVERSIONS[0][1]
+
         # things that are actually sent
 #        self.name = col['name']
 #        self.data_type = self.DATA_TYPE_CONVERSIONS[col['data_type_oid']][0]
