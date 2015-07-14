@@ -82,6 +82,7 @@ class Cursor(object):
 
         # read messages until we hit an Error, DataRow or ReadyForQuery
         while True:
+            print "iterated"
             message = self.connection.read_message()
             # save the message because there's no way to undo the read
             self._message = message
