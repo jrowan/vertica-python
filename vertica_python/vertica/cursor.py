@@ -87,7 +87,7 @@ class Cursor(object):
             # save the message because there's no way to undo the read
             self._message = message
             print message
-            if isinstance(message, messages.ErrorResponse):
+            if isinstance(message, messages.backend_messages.error_response.ErrorResponse):
                 raise errors.QueryError.from_error_response(message, operation)
             elif isinstance(message, messages.RowDescription):
                 self.description = map(lambda fd: Column(fd), message.fields)
