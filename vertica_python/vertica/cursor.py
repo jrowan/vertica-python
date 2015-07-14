@@ -86,6 +86,7 @@ class Cursor(object):
             message = self.connection.read_message()
             # save the message because there's no way to undo the read
             self._message = message
+            print message
             if isinstance(message, messages.ErrorResponse):
                 raise errors.QueryError.from_error_response(message, operation)
             elif isinstance(message, messages.RowDescription):
