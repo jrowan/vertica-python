@@ -43,8 +43,6 @@ class Cursor(object):
         self._closed = True
 
     def execute(self, operation, parameters=None):
-        print "EXECUTE CALLED!"
-        print operation
         if self.closed():
             raise errors.Error('Cursor is closed')
 
@@ -84,15 +82,10 @@ class Cursor(object):
 
         # read messages until we hit an Error, DataRow or ReadyForQuery
         while True:
-            print "iterated"
             message = self.connection.read_message()
             # save the message because there's no way to undo the read
             self._message = message
-            print message
-            print str(type(message))
-            print isinstance(message, messages.backend_messages.error_response.ErrorResponse)
             if isinstance(message, messages.backend_messages.error_response.ErrorResponse):
-                "RAISING ERROR!"
                 raise errors.QueryError.from_error_response(message, operation)
             elif isinstance(message, messages.RowDescription):
                 self.description = map(lambda fd: Column(fd), message.fields)
