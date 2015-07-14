@@ -44,6 +44,7 @@ class Cursor(object):
 
     def execute(self, operation, parameters=None):
         print "EXECUTE CALLED!"
+        print operation
         if self.closed():
             raise errors.Error('Cursor is closed')
 
