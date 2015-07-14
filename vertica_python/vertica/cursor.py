@@ -43,6 +43,7 @@ class Cursor(object):
         self._closed = True
 
     def execute(self, operation, parameters=None):
+        print "EXECUTE CALLED!"
         if self.closed():
             raise errors.Error('Cursor is closed')
 
@@ -90,6 +91,7 @@ class Cursor(object):
             print str(type(message))
             print isinstance(message, messages.backend_messages.error_response.ErrorResponse)
             if isinstance(message, messages.backend_messages.error_response.ErrorResponse):
+                "RAISING ERROR!"
                 raise errors.QueryError.from_error_response(message, operation)
             elif isinstance(message, messages.RowDescription):
                 self.description = map(lambda fd: Column(fd), message.fields)
