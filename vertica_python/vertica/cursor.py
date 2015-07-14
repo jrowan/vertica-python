@@ -88,6 +88,7 @@ class Cursor(object):
             self._message = message
             print message
             print str(type(message))
+            print isinstance(message, messages.backend_messages.error_response.ErrorResponse)
             if isinstance(message, messages.backend_messages.error_response.ErrorResponse):
                 raise errors.QueryError.from_error_response(message, operation)
             elif isinstance(message, messages.RowDescription):
