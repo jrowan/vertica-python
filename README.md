@@ -2,6 +2,8 @@
 
 [![PyPI version](https://badge.fury.io/py/vertica-python.png)](http://badge.fury.io/py/vertica-python)
 
+This fork incorporates Johan Olofsson's fork to allow streaming into copy commands, rebasing version 0.5.0 of vertica_python onto the branch at https://github.com/johano99/vertica-python.
+
 0.5.x changes the connection method to accept kwargs instead of a dict to be more dbapi compliant
 
 0.4.x breaks some of the older query interfaces (row_handler callback, and connection.query).
