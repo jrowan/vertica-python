@@ -169,6 +169,7 @@ class Cursor(object):
         while True:
             message = self.connection.read_message()
             if isinstance(message, messages.ReadyForQuery):
+                self.connection.write(messages.CopyDone())
                 break
             elif isinstance(message, messages.CopyInResponse):
 
